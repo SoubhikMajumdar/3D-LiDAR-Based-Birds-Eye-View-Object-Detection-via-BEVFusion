@@ -134,6 +134,10 @@ A short stitched video (`outputs/detections_demo.mp4`) is produced with MoviePy:
 python -c "from moviepy import ImageClip, concatenate_videoclips; import os; frames=['outputs/kitti_pointpillars/000008_2d_vis.png','outputs/kitti_pointpillars/000008_open3d.png','outputs/nuscenes_pointpillars/sample_open3d.png']; clips=[ImageClip(f).with_duration(3) for f in frames if os.path.exists(f)]; concatenate_videoclips(clips, method='compose').write_videofile('outputs/detections_demo.mp4', fps=24, codec='libx264', audio=False)"
 ```
 
+Inline preview (GIF):
+
+![3D Detection Demo](outputs/detections_demo.gif)
+
 ## Runtime & Score Stats
 
 - `outputs/inference_times.json` – measured wall-clock runtime per frame using PowerShell’s `Measure-Command`.
