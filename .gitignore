@@ -4,22 +4,35 @@ __pycache__/
 *.pyo
 *.pyd
 *.log
+*.egg-info/
+build/
+dist/
+*.egg
 
 # Virtual environments
 .venv/
 env/
 venv/
+ENV/
 
 # OS junk
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Large/model artifacts
 external/
 checkpoints/
-outputs/*.ply
-outputs/*.pcd
-outputs/*.bin
+outputs/**/*.ply
+outputs/**/*.pcd
+outputs/**/*.bin
+outputs/**/*.mp4
+outputs/**/*.gif
+
+# BEV visualization outputs (keep structure, ignore large images)
+outputs/**/bev_visualization*.png
+outputs/**/*_2d_vis.png
+outputs/**/*open3d*.png
 
 # Temporary data caches
 data/*/velodyne/
@@ -29,3 +42,28 @@ data/*/calib/
 
 # MoviePy cache files
 *.mp4.temp
+
+# Test and analysis scripts output
+test_*.png
+check_*.py
+analyze_*.py
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled CUDA extensions (BEVFusion)
+external/mmdetection3d/projects/BEVFusion/build/
+external/mmdetection3d/projects/BEVFusion/*.so
+external/mmdetection3d/projects/BEVFusion/*.pyd
+
+# Metrics and reports (keep structure)
+metrics_output.txt
+*.json.tmp

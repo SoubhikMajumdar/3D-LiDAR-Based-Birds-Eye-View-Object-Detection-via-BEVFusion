@@ -3,6 +3,12 @@ import argparse
 from pathlib import Path
 import numpy as np
 
+# Add CUDA DLL directory for BEVFusion on Windows
+if os.name == 'nt':  # Windows
+    cuda_bin_path = r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\bin"
+    if os.path.exists(cuda_bin_path):
+        os.add_dll_directory(cuda_bin_path)
+
 try:
     # Use mmdet3d's high-level inferencers
     from mmdet3d.apis import (

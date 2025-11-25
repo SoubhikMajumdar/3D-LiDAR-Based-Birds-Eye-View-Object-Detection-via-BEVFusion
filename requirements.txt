@@ -1,0 +1,50 @@
+# BEVMF - BEV (Bird's-Eye View) 3D Object Detection Framework
+# Core dependencies for BEV-based 3D object detection models
+
+# Package management
+openmim
+
+# Deep Learning Framework
+# For CUDA (recommended):
+torch>=2.1.0
+torchvision>=0.16.0
+torchaudio>=2.1.0
+# For CPU-only: use torch==2.1.2+cpu, torchvision==0.16.2+cpu, torchaudio==2.1.2+cpu
+
+# OpenMMLab ecosystem (for BEV models)
+mmengine
+mmcv>=2.1.0,<2.2.0
+mmdet>=3.2.0
+mmdet3d>=1.4.0
+
+# Numerical computing
+numpy==1.26.4  # Pinned for compatibility with mmcv compiled ops
+
+# Computer Vision & Visualization
+opencv-python==4.8.1.78
+opencv-python-headless==4.8.1.78
+open3d>=0.17.0  # For 3D point cloud visualization
+matplotlib>=3.7.0  # For BEV visualization
+scikit-image
+
+# 3D Data Processing
+plyfile
+trimesh
+nuscenes-devkit  # For nuScenes dataset support
+lyft_dataset_sdk  # For Lyft dataset support
+
+# Utilities
+tqdm
+pandas
+seaborn  # For statistical visualization
+moviepy  # For video generation
+networkx>=2.5
+numba  # For numerical acceleration (use numba==0.53.0 for CUDA 9.0)
+
+# Logging & Monitoring
+tensorboard
+
+# Note: BEVFusion requires custom CUDA operations compilation
+# Run after installation:
+# python external/mmdetection3d/projects/BEVFusion/setup.py develop
+
