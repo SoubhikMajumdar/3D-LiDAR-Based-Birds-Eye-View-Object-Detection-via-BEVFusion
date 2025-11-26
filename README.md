@@ -325,23 +325,6 @@ Example BEV visualization from BEVFusion:
 
 ![BEV Visualization](outputs/bevfusion_lidar_fixed/bev_visualization_final.png)
 
-## Open3D Visualization
-
-The helper script supports both interactive and headless viewing.
-
-### Capture Screenshot (headless)
-```powershell
-python scripts/open3d_view_saved_ply.py --dir outputs\kitti_pointpillars --basename 000008 `
-  --width 1600 --height 1200 --save-path outputs\kitti_pointpillars\000008_open3d.png --no-show
-```
-
-### Interactive Exploration
-```powershell
-python scripts/open3d_view_saved_ply.py --dir outputs\kitti_pointpillars --basename 000008 --width 1600 --height 1200
-```
-- Mouse rotate, right-click pan, scroll zoom, `Q` to close.
-- Repeat with `--dir outputs\nuscenes_pointpillars --basename sample.pcd` for nuScenes.
-
 ## Runtime & Score Stats
 
 - `outputs/inference_times.json` – measured wall-clock runtime per frame using PowerShell’s `Measure-Command`.
