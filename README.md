@@ -293,6 +293,7 @@ All inference runs generate:
 - `*_axes.ply` - Coordinate axes (Open3D format)
 - `preds/*.json` - Formatted prediction JSON files
 - `bev_visualization.png` - **BEV (Bird's-Eye View) visualization** (generated via `scripts/visualize_bev.py`)
+- `bev_visualization_final.png` - Final BEV visualization for BEVFusion results
 
 ## BEV Visualization
 
@@ -320,6 +321,10 @@ The BEV visualization shows:
 - Color-coded legend for object classes
 - Proper axis scaling based on detection ranges
 
+Example BEV visualization from BEVFusion:
+
+![BEV Visualization](outputs/bevfusion_lidar_fixed/bev_visualization_final.png)
+
 ## Open3D Visualization
 
 The helper script supports both interactive and headless viewing.
@@ -336,18 +341,6 @@ python scripts/open3d_view_saved_ply.py --dir outputs\kitti_pointpillars --basen
 ```
 - Mouse rotate, right-click pan, scroll zoom, `Q` to close.
 - Repeat with `--dir outputs\nuscenes_pointpillars --basename sample.pcd` for nuScenes.
-
-## Demo Video Assembly
-
-A short stitched video (`outputs/detections_demo.mp4`) is produced with MoviePy:
-
-```powershell
-python -c "from moviepy import ImageClip, concatenate_videoclips; import os; frames=['outputs/kitti_pointpillars/000008_2d_vis.png','outputs/kitti_pointpillars/000008_open3d.png','outputs/nuscenes_pointpillars/sample_open3d.png']; clips=[ImageClip(f).with_duration(3) for f in frames if os.path.exists(f)]; concatenate_videoclips(clips, method='compose').write_videofile('outputs/detections_demo.mp4', fps=24, codec='libx264', audio=False)"
-```
-
-Inline preview (GIF):
-
-![3D Detection Demo](outputs/detections_demo.gif)
 
 ## Runtime & Score Stats
 
@@ -446,11 +439,3 @@ See `REPORT.md` for comprehensive analysis and results.
   - Performance analysis
   - Visualizations and screenshots
   - Conclusions and recommendations
-
-## Next Steps
-
-- **Batch Processing:** Process multiple frames by setting `--frame-number -1` for KITTI or looping over nuScenes files
-- **Evaluation Metrics:** Integrate AP/mAP calculations by comparing predictions with ground-truth labels
-- **Additional Models:** Try other MMDetection3D configs (SECOND, Part-A2, etc.) on a GPU-enabled setup
-- **Fine-tuning:** Use the training scripts in `external/mmdetection3d/tools/train.py` for custom datasets
-- **Performance Profiling:** Enable inference time measurements in `compare_models_metrics.py` for FPS analysis
