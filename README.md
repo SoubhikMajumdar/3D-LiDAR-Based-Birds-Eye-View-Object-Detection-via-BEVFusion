@@ -325,6 +325,49 @@ Example BEV visualization from BEVFusion:
 
 ![BEV Visualization](outputs/bevfusion_lidar_fixed/bev_visualization_final.png)
 
+### BEVFusion Detection Statistics (Score >= 0.3)
+
+The BEV visualization above shows 27 high-confidence detections (score >= 0.3) from BEVFusion inference on nuScenes data.
+
+**Overall Detection Summary:**
+- **Total Detections:** 27 objects (filtered from 200 total detections)
+- **Score Threshold:** 0.3
+
+**Confidence Score Statistics:**
+- **Maximum Score:** 0.772
+- **Mean Score:** 0.565
+- **Median Score:** 0.559
+- **Standard Deviation:** 0.127
+- **Minimum Score:** 0.316
+
+**Confidence Distribution:**
+- **Very High (>0.5):** 18 detections (66.7%)
+- **High (0.3-0.5):** 9 detections (33.3%)
+
+**Class Distribution:**
+- **Barrier:** 16 detections (59.3%) - Average score: 0.568
+- **Pedestrian:** 6 detections (22.2%) - Average score: 0.627
+- **Car:** 3 detections (11.1%) - Average score: 0.451
+- **Traffic Cone:** 1 detection (3.7%) - Average score: 0.561
+- **Truck:** 1 detection (3.7%) - Average score: 0.492
+
+**Spatial Coverage:**
+- **Position Range:**
+  - X: -16.13 to 13.59 meters
+  - Y: -19.55 to 40.30 meters
+  - Z: -2.52 to -0.52 meters
+- **Object Size Range:**
+  - Width: 0.40 to 10.07 meters
+  - Length: 0.41 to 2.80 meters
+  - Height: 0.74 to 3.44 meters
+
+**Key Observations:**
+1. **High Quality Detections:** Mean confidence of 0.565 indicates strong detection quality (vs 0.111 for all detections)
+2. **Strong Confidence:** 66.7% of filtered detections have very high confidence (>0.5)
+3. **Barrier Dominance:** Barriers are the most frequently detected class (16/27, 59.3%) with good average confidence
+4. **Pedestrian Performance:** Pedestrians show the highest average confidence (0.627) among classes with multiple detections
+5. **Focused Coverage:** Spatial coverage is more concentrated (~30m × 60m area) compared to all detections
+
 ## Runtime & Score Stats
 
 - `outputs/inference_times.json` – measured wall-clock runtime per frame using PowerShell’s `Measure-Command`.
