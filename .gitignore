@@ -40,6 +40,9 @@ data/*/image_*/
 data/*/label_*/
 data/*/calib/
 
+# Large datasets
+data/nuscenes/mini/
+
 # MoviePy cache files
 *.mp4.temp
 

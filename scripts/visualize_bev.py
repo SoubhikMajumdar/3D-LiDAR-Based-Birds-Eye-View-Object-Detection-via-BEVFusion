@@ -206,31 +206,58 @@ def visualize_bev(points, predictions, output_path, score_threshold=0.1,
     ax.set_aspect('equal')
     
     # Set axis limits based on data ranges to ensure proper scaling
+    # Primary: use bbox range with generous padding to show context
+    # Fallback: use point cloud range (excluding extreme outliers)
     if len(bboxes) > 0:
+        # Start with bbox range
+        x_min, x_max = bboxes[:, 0].min(), bboxes[:, 0].max()
+        y_min, y_max = bboxes[:, 1].min(), bboxes[:, 1].max()
+        
+        # Add generous padding (50% on each side) to show context
+        x_range = x_max - x_min
+        y_range = y_max - y_min
+        x_pad = max(x_range * 0.5, 20.0)  # At least 20m padding
+        y_pad = max(y_range * 0.5, 20.0)
+        
+        # If point cloud is available, ensure we show reasonable context
+        if len(points) > 0:
+            # Use percentile-based range to exclude extreme outliers
+            pc_x_min = np.percentile(points[:, 0], 2)
+            pc_x_max = np.percentile(points[:, 0], 98)
+            pc_y_min = np.percentile(points[:, 1], 2)
+            pc_y_max = np.percentile(points[:, 1], 98)
+            
+            # Expand bbox range to include reasonable point cloud context
+            x_min = min(x_min - x_pad, pc_x_min)
+            x_max = max(x_max + x_pad, pc_x_max)
+            y_min = min(y_min - y_pad, pc_y_min)
+            y_max = max(y_max + y_pad, pc_y_max)
+        else:
+            x_min -= x_pad
+            x_max += x_pad
+            y_min -= y_pad
+            y_max += y_pad
+        
+        ax.set_xlim(x_min, x_max)
+        ax.set_ylim(y_min, y_max)
+    elif len(points) > 0:
+        # Fallback: use point cloud range (excluding outliers)
+        pc_x_min = np.percentile(points[:, 0], 2)
+        pc_x_max = np.percentile(points[:, 0], 98)
+        pc_y_min = np.percentile(points[:, 1], 2)
+        pc_y_max = np.percentile(points[:, 1], 98)
+        
+        x_range = pc_x_max - pc_x_min
+        y_range = pc_y_max - pc_y_min
+        x_pad = max(x_range * 0.1, 5.0)
+        y_pad = max(y_range * 0.1, 5.0)
+        ax.set_xlim(pc_x_min - x_pad, pc_x_max + x_pad)
+        ax.set_ylim(pc_y_min - y_pad, pc_y_max + y_pad)
+    elif len(bboxes) > 0:
+        # Fallback: use bbox range if no point cloud available
         x_min, x_max = bboxes[:, 0].min(), bboxes[:, 0].max()
         y_min, y_max = bboxes[:, 1].min(), bboxes[:, 1].max()
         # Add padding
-        x_range = x_max - x_min
-        y_range = y_max - y_min
-        x_pad = max(x_range * 0.1, 5.0)
-        y_pad = max(y_range * 0.1, 5.0)
-        ax.set_xlim(x_min - x_pad, x_max + x_pad)
-        ax.set_ylim(y_min - y_pad, y_max + y_pad)
-    
-    # Also set limits based on point cloud if available
-    if len(points) > 0:
-        pc_x_min, pc_x_max = points[:, 0].min(), points[:, 0].max()
-        pc_y_min, pc_y_max = points[:, 1].min(), points[:, 1].max()
-        if len(bboxes) > 0:
-            # Use union of bbox and point cloud ranges
-            x_min = min(bboxes[:, 0].min(), pc_x_min)
-            x_max = max(bboxes[:, 0].max(), pc_x_max)
-            y_min = min(bboxes[:, 1].min(), pc_y_min)
-            y_max = max(bboxes[:, 1].max(), pc_y_max)
-        else:
-            x_min, x_max = pc_x_min, pc_x_max
-            y_min, y_max = pc_y_min, pc_y_max
-        
         x_range = x_max - x_min
         y_range = y_max - y_min
         x_pad = max(x_range * 0.1, 5.0)

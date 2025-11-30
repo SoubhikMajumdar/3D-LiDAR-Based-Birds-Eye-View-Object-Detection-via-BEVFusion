@@ -41,10 +41,15 @@ moviepy  # For video generation
 networkx>=2.5
 numba  # For numerical acceleration (use numba==0.53.0 for CUDA 9.0)
 
-# Logging & Monitoring
+# Logging & Monitoring (for training/fine-tuning)
 tensorboard
 
 # Note: BEVFusion requires custom CUDA operations compilation
 # Run after installation:
 # python external/mmdetection3d/projects/BEVFusion/setup.py develop
+#
+# For distributed training (multi-GPU), additional setup may be required:
+# - Ensure CUDA is properly configured
+# - Use torch.distributed for multi-GPU training
+# - See README.md "Fine-Tuning BEVFusion" section for training commands
 

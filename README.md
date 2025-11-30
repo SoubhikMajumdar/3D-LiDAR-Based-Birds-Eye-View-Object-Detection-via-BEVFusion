@@ -268,6 +268,91 @@ python mmdet3d_inference2.py `
      --score-thr 0.3
    ```
 
+## Fine-Tuning BEVFusion
+
+Fine-tune BEVFusion pretrained weights on your dataset (e.g., nuScenes mini or full dataset).
+
+### Prerequisites
+
+- Pretrained BEVFusion checkpoint (see "Download Pretrained Models" section)
+- Prepared dataset with proper directory structure and info files (`.pkl` files)
+- CUDA-enabled GPU (recommended for training)
+
+### Fine-Tuning Options
+
+#### Option 1: Resume from Checkpoint (Continue Training)
+
+```powershell
+python external\mmdetection3d\tools\train.py `
+  external\mmdetection3d\projects\BEVFusion\configs\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py `
+  --work-dir outputs\bevfusion_training `
+  --resume checkpoints\bevfusion_lidar\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933_fixed.pth `
+  --amp
+```
+
+#### Option 2: Fine-Tune on nuScenes Mini Dataset
+
+```powershell
+python external\mmdetection3d\tools\train.py `
+  external\mmdetection3d\projects\BEVFusion\configs\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py `
+  --work-dir outputs\bevfusion_finetune `
+  --cfg-options `
+    data_root='data/nuscenes/mini/' `
+    load_from='checkpoints/bevfusion_lidar/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933_fixed.pth' `
+    train_cfg.max_epochs=10 `
+    optim_wrapper.optimizer.lr=0.0001 `
+  --amp
+```
+
+#### Option 3: Fine-Tune on Full nuScenes Dataset
+
+```powershell
+python external\mmdetection3d\tools\train.py `
+  external\mmdetection3d\projects\BEVFusion\configs\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py `
+  --work-dir outputs\bevfusion_finetune_full `
+  --cfg-options `
+    data_root='data/nuscenes/' `
+    load_from='checkpoints/bevfusion_lidar/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933_fixed.pth' `
+    train_cfg.max_epochs=20 `
+    optim_wrapper.optimizer.lr=0.0001 `
+  --amp
+```
+
+### Fine-Tuning Parameters
+
+- `--resume`: Resume training from checkpoint (continues from last epoch)
+- `load_from`: Load pretrained weights and start new training (recommended for fine-tuning)
+- `--amp`: Enable mixed precision training (fp16) to reduce memory usage
+- `train_cfg.max_epochs`: Number of training epochs (typically 10-20 for fine-tuning)
+- `optim_wrapper.optimizer.lr`: Learning rate (typically 0.0001 or lower for fine-tuning)
+- `data_root`: Path to your dataset directory
+- `--work-dir`: Directory to save training logs and checkpoints
+
+### Training Output
+
+Training generates:
+- `work-dir/epoch_*.pth` - Checkpoint files for each epoch
+- `work-dir/latest.pth` - Latest checkpoint
+- `work-dir/best_*.pth` - Best checkpoint based on validation metrics
+- `work-dir/*.log.json` - Training logs in JSON format
+- `work-dir/*.log` - Human-readable training logs
+
+### Using Fine-Tuned Checkpoints
+
+After fine-tuning, use the new checkpoint for inference:
+
+```powershell
+python mmdet3d_inference2.py `
+  --dataset any `
+  --input-path data\nuscenes_demo\lidar\sample.pcd.bin `
+  --model external\mmdetection3d\projects\BEVFusion\configs\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py `
+  --checkpoint outputs\bevfusion_finetune\latest.pth `
+  --out-dir outputs\bevfusion_finetuned_inference `
+  --device cuda:0 `
+  --headless `
+  --score-thr 0.3
+```
+
 ### 6. nuScenes CenterPoint (CUDA Required)
 
 ```powershell

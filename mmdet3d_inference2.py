@@ -2,6 +2,7 @@ import os
 import argparse
 from pathlib import Path
 import numpy as np
+import torch
 
 # Add CUDA DLL directory for BEVFusion on Windows
 if os.name == 'nt':  # Windows
@@ -1038,15 +1039,70 @@ def main(args):
         inferencer_input = single_input
         
         # Run inference
-        results_dict = inferencer(
-            inferencer_input,
-            show=False,
-            out_dir=args.out_dir,
-            pred_score_thr=args.score_thr
-        )
-        
-        pred_dict = results_dict['predictions'][0]
-        pred_bboxes_3d = np.array(pred_dict['bboxes_3d'])
+        try:
+            results_dict = inferencer(
+                inferencer_input,
+                show=False,
+                out_dir=args.out_dir,
+                pred_score_thr=args.score_thr
+            )
+            
+            pred_dict = results_dict['predictions'][0]
+            pred_bboxes_3d = np.array(pred_dict['bboxes_3d'])
+        except (AttributeError, KeyError) as e:
+            if 'box_mode_3d' in str(e) or 'box_type_3d' in str(e) or 'predictions' in str(e):
+                # Workaround for MMDetection3D version compatibility issue
+                print(f"  > Warning: Postprocessing error ({e}), extracting predictions directly from model...")
+                try:
+                    # Preprocess input (returns a generator, convert to list)
+                    preprocessed = list(inferencer.preprocess(inferencer_input, 0))
+                    if len(preprocessed) == 0:
+                        raise ValueError("Preprocessing returned empty result")
+                    data_sample = preprocessed[0]
+                    
+                    # Run model inference
+                    with torch.no_grad():
+                        preds = inferencer.model.test_step([data_sample])
+                    
+                    # Extract predictions manually
+                    if isinstance(preds, list) and len(preds) > 0:
+                        pred_sample = preds[0]
+                        if hasattr(pred_sample, 'pred_instances_3d'):
+                            instances = pred_sample.pred_instances_3d
+                            
+                            # Filter by score threshold
+                            if args.score_thr > 0:
+                                mask = instances.scores_3d >= args.score_thr
+                                instances = instances[mask]
+                            
+                            # Convert to numpy
+                            bboxes = instances.bboxes_3d
+                            scores = instances.scores_3d
+                            labels = instances.labels_3d
+                            
+                            if hasattr(bboxes, 'cpu'):
+                                bboxes = bboxes.cpu().numpy()
+                            if hasattr(scores, 'cpu'):
+                                scores = scores.cpu().numpy()
+                            if hasattr(labels, 'cpu'):
+                                labels = labels.cpu().numpy()
+                            
+                            pred_dict = {
+                                'bboxes_3d': bboxes.tolist() if isinstance(bboxes, np.ndarray) else bboxes,
+                                'scores_3d': scores.tolist() if isinstance(scores, np.ndarray) else scores,
+                                'labels_3d': labels.tolist() if isinstance(labels, np.ndarray) else labels,
+                            }
+                            pred_bboxes_3d = np.array(pred_dict['bboxes_3d'])
+                            print(f"  > Successfully extracted {len(pred_bboxes_3d)} predictions")
+                        else:
+                            raise ValueError("Could not extract predictions from model output")
+                    else:
+                        raise ValueError("Model returned empty predictions")
+                except Exception as e2:
+                    print(f"  > Error extracting predictions: {e2}")
+                    raise e  # Re-raise original error
+            else:
+                raise
 
         # Save the raw predictions (JSON)
         pred_path = Path(args.out_dir) / f"{basename}_predictions.json"
