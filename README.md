@@ -268,6 +268,30 @@ python mmdet3d_inference2.py `
      --score-thr 0.3
    ```
 
+### Running Inference on nuScenes Mini Dataset
+
+5. **Run inference on nuScenes mini sample:**
+   ```powershell
+   python mmdet3d_inference2.py `
+     --dataset any `
+     --input-path data\nuscenes\mini\samples\LIDAR_TOP\n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd.bin `
+     --model external\mmdetection3d\projects\BEVFusion\configs\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py `
+     --checkpoint checkpoints\bevfusion_lidar\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933_fixed.pth `
+     --out-dir outputs\bevfusion_nuscenes_mini `
+     --device cuda:0 `
+     --headless `
+     --score-thr 0.3
+   ```
+
+6. **Generate BEV visualization for nuScenes mini:**
+   ```powershell
+   python scripts\visualize_bev.py `
+     --points outputs\bevfusion_nuscenes_mini\n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd_points.ply `
+     --predictions outputs\bevfusion_nuscenes_mini\n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd_predictions.json `
+     --output outputs\bevfusion_nuscenes_mini\n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590_bev_visualization.png `
+     --score-thr 0.3
+   ```
+
 ## Fine-Tuning BEVFusion
 
 Fine-tune BEVFusion pretrained weights on your dataset (e.g., nuScenes mini or full dataset).
