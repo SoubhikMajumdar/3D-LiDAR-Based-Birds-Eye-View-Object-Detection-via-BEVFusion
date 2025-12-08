@@ -47,6 +47,17 @@ python -m pip install -U pip
 pip install -r requirements.txt
 pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 \
     --index-url https://download.pytorch.org/whl/cu118
+# Install mmcv with CUDA support (required for mmdet3d)
+pip uninstall mmcv -y
+pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.1.0/index.html
+```
+
+#### Install mmdet3d in Development Mode (Recommended)
+Install mmdet3d from the external directory to use the latest fixes:
+```powershell
+cd external/mmdetection3d
+python setup.py develop
+cd ../..
 ```
 
 #### Compile BEVFusion CUDA Operations (Required for BEVFusion)
@@ -56,6 +67,8 @@ cd external/mmdetection3d/projects/BEVFusion
 python setup.py develop
 cd ../../..
 ```
+
+> **Note:** If BEVFusion CUDA compilation fails due to missing CUDA toolkit or Visual Studio, the model can still run inference using CPU fallback, though it will be slower.
 
 **Verify CUDA Installation:**
 ```powershell
@@ -274,7 +287,7 @@ python mmdet3d_inference2.py `
    ```powershell
    python mmdet3d_inference2.py `
      --dataset any `
-     --input-path data\nuscenes\mini\samples\LIDAR_TOP\n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd.bin `
+     --input-path data\v1.0-mini\samples\LIDAR_TOP\n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd.bin `
      --model external\mmdetection3d\projects\BEVFusion\configs\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py `
      --checkpoint checkpoints\bevfusion_lidar\bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d-2628f933_fixed.pth `
      --out-dir outputs\bevfusion_nuscenes_mini `
@@ -535,6 +548,7 @@ See `REPORT.md` for comprehensive analysis and results.
 - **CUDA not available:** Ensure PyTorch CUDA version matches your CUDA toolkit. Install with `--index-url https://download.pytorch.org/whl/cu118`
 - **CUDA out of memory:** Reduce batch size or use CPU for PointPillars models
 - **Sparse conv errors:** CenterPoint and BEVFusion require CUDA. Use PointPillars on CPU if GPU unavailable
+- **mmcv._ext module not found:** Install mmcv with CUDA support: `pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.1.0/index.html`
 
 ### Model-Specific Issues
 - **3DSSD false positives:** Use higher score threshold (`--score-thr 0.6` or `0.7`)
@@ -546,6 +560,8 @@ See `REPORT.md` for comprehensive analysis and results.
 - **Open3D import failures:** Confirm `pip show open3d` inside the active venv
 - **Long runtimes:** CPU inference is slow (~10-12s per frame); use CUDA for faster inference
 - **Missing checkpoints:** Run `mim download` commands to fetch model weights
+- **AttributeError: 'Det3DDataSample' object has no attribute 'box_mode_3d':** This is fixed in the external/mmdetection3d version. If using installed mmdet3d, copy the fixed file: `Copy-Item external\mmdetection3d\mmdet3d\apis\inferencers\base_3d_inferencer.py .venv\lib\site-packages\mmdet3d\apis\inferencers\base_3d_inferencer.py -Force`
+- **nuScenes mini dataset location:** The nuScenes mini dataset is located in `data/v1.0-mini/` directory, not `data/nuscenes/mini/`
 
 ## Key Outputs (for reference)
 
