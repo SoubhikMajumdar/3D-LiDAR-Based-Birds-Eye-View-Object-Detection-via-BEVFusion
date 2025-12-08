@@ -116,6 +116,20 @@ Demo inputs come from the cloned `external/mmdetection3d/demo/data/` directory. 
      data\nuscenes_demo\lidar\sample.pcd.bin
    ```
 
+3. **Download nuScenes Mini Dataset (Optional - for nuScenes mini inference)**
+   The nuScenes mini dataset is required for running inference on nuScenes mini samples. Download it from the [nuScenes website](https://www.nuscenes.org/download) and extract it to the `data/` directory. The dataset should be extracted so that the structure is:
+   ```
+   data/
+     v1.0-mini/
+       samples/
+         LIDAR_TOP/
+           *.pcd.bin
+       sweeps/
+       maps/
+       ...
+   ```
+   After extraction, the path `data/v1.0-mini/samples/LIDAR_TOP/` should contain the LiDAR point cloud files.
+
 ## Download Pretrained Models
 
 Use OpenMIM to grab the relevant checkpoints and configs.
