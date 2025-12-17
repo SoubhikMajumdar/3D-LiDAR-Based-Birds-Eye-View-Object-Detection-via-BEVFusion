@@ -94,11 +94,9 @@ We compared several strategies to adapt the pre-trained model to our specific da
 !![Results](resultfull.png)
 
 ### Training Loss vs Epochs (Final Run)
-*Loss decreased steadily, showing effective learning despite the partial dataset.*
 ![Training Loss](training_loss_rerun.png)
 
 ### Validation Accuracy (mAP) vs Epochs
-*Accuracy remained high, validating the "sanitized" dataset approach.*
 ![Validation mAP](validation_map_rerun.png)
 
 ---
