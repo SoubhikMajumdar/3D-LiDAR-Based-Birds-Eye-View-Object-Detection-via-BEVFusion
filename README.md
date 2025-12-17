@@ -77,10 +77,7 @@ cd ../../../..
 ## 📊 Models & Datasets
 
 ### Dataset: nuScenes (v1.0-mini & v1.0-trainval partial)
-We focused on fine-tuning using a **partial slice** of the full nuScenes dataset (referred to as `blob01`), containing ~2500 training samples.
-
-*   **Challenge**: The metadata contained citations for files not present in the partial download.
-*   **Solution**: We developed `sanitize_pkl.py` to filter the dataset info files, removing disjoint references to prevent training crashes.
+Make sure to install a nuScenes dataset in the data/ folder. In our case we used nuScene mini and a portion of the full nuScene dataset(`blob01`).
 
 ### Model: BEVFusion (LiDAR Only)
 *   **Backbone**: VoxelNet
@@ -93,13 +90,8 @@ We focused on fine-tuning using a **partial slice** of the full nuScenes dataset
 ## 📈 Experiment Results (Fine-Tuning)
 
 We compared several strategies to adapt the pre-trained model to our specific data subset.
-
-| Strategy | Learning Rate | Epochs | mAP | NDS | Note |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Baseline** | N/A | 0 | **0.551** | **0.569** | Original Pre-trained |
-| **Fail** | 5e-5 | 30 | 0.384 | 0.467 | Catastrophic Forgetting |
-| **Gentle** | 2e-6 | 12 | **0.523** | **0.554** | Best Stability |
-| **Full Run** | 1e-4 | 10 | **0.543** | **0.605** | **Final Selected Model** |
+![Results](results.png)
+!![Results](resultfull.png)
 
 ### Training Loss vs Epochs (Final Run)
 *Loss decreased steadily, showing effective learning despite the partial dataset.*
