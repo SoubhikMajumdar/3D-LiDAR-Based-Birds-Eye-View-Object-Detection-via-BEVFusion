@@ -16,7 +16,7 @@ We successfully fine-tuned the model and ran inference on validation samples.
 ### Bird's Eye View (BEV) Visualization
 *Point cloud colored by height (Z), detections in class-specific colors.*
 
-![Demo Preview](demo_preview_v2.png)
+[![Demo Preview](demo_preview_v2.png)](https://github.com/SoubhikMajumdar/3D-LiDAR-Based-Birds-Eye-View-Object-Detection-via-BEVFusion/blob/fine-tune-final/demo/outputs/vis/n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd.bin.png)
 
 ---
 
