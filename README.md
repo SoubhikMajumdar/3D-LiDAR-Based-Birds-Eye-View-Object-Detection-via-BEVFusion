@@ -104,29 +104,3 @@ To reproduce the training:
     python external\mmdetection3d\tools\train.py external\mmdetection3d\projects\BEVFusion/configs/bevfusion_lidar_voxel0075_second_secfpn_8xb4-cyclic-20e_nus-3d.py
     ```
 
-### 2. Demo generation
-To run inference on sample files and generate visualizations:
-
-```bash
-# 1. Setup Demo (Inference)
-python setup_demo.py
-# This creates demo/outputs/preds/*.json
-
-# 2. Visualize (Generate Images)
-python visualize_demo.py
-# Output: demo/outputs/vis/*.png
-```
-
----
-
-## ⚠️ Takeaways & Limitations
-
-1.  **Partial Data Complexity**: Training on a dataset slice is non-trivial. Standard tools assume the full dataset exists. **Sanitization** of metadata is critical to prevent "File Not Found" crashes during evaluation.
-2.  **Submodule Management**: BEVFusion is often implemented as a plugin. Managing python paths (`PYTHONPATH`) and checking ignored submodule files is essential for reproducibility.
-3.  **Hyperparameters matter**: A high learning rate (e.g., 5e-5) on a small/partial dataset leads to rapid **catastrophic forgetting**. A lower, "gentle" learning rate (2e-6) preserved pre-trained knowledge much better.
-4.  **Windows Compilation**: Compiling custom CUDA ops (GridSampler, Voxelization) on Windows requires careful setup of `DISTUTILS_USE_SDK=1` and Visual Studio environments.
-
----
-
-**Authors**: Juan D. Liang
-**Remote**: [SoubhikMajumdar/3D-LiDAR-Based-Birds-Eye-View-Object-Detection-via-BEVFusion](https://github.com/SoubhikMajumdar/3D-LiDAR-Based-Birds-Eye-View-Object-Detection-via-BEVFusion)
