@@ -14,7 +14,7 @@ The project focuses on:
 ### Bird's Eye View (BEV) Visualization
 *Point cloud colored by height (Z), detections in class-specific colors.*
 
-![Demo Preview](demo/outputs/vis/n008-2018-08-01-15-16-36-0400__LIDAR_TOP__1533151603547590.pcd.bin.png)
+![BEV Visualization](outputs/bevfusion_lidar_fixed/bev_visualization_final.png)
 
 ---
 
