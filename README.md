@@ -319,6 +319,28 @@ python mmdet3d_inference2.py `
      --score-thr 0.3
    ```
 
+## Fine-Tuning Branch (`fine-tune-final`)
+
+For full BEVFusion fine-tuning experiments (beyond the quick commands below), this repository provides a dedicated branch:
+
+- **Branch name**: `fine-tune-final`
+- **Purpose**: Contains the final fine-tuning workflow, training utilities, and project report artifacts.
+
+To switch to this branch:
+
+```powershell
+git fetch origin
+git switch fine-tune-final
+```
+
+Key additions in `fine-tune-final`:
+- **`fine_tuning_guide.md`**: Step-by-step guide for fine-tuning BEVFusion on nuScenes (mini or full).
+- **`demo/` + `setup_demo.py` + `visualize_demo.py`**: End-to-end demo pipeline for running the fine-tuned model and visualizing results.
+- **`graph_training_loss.py`**: Utility to parse training logs and plot loss/metric curves.
+- **`final_report.md` and `finalresutls.md`**: Final project report and summarized metrics from the fine-tuned BEVFusion model.
+
+Use the **`master`** branch when you only need pretrained-model inference and BEV visualizations, and switch to **`fine-tune-final`** when you want to reproduce or extend the full fine-tuning experiments and analysis.
+
 ## Fine-Tuning BEVFusion
 
 Fine-tune BEVFusion pretrained weights on your dataset (e.g., nuScenes mini or full dataset).
