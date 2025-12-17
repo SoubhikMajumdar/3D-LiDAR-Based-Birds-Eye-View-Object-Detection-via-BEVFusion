@@ -9,9 +9,7 @@ The project focuses on:
 
 ---
 
-## 📸 Demo Results
-
-We successfully fine-tuned the model and ran inference on validation samples.
+#  Results
 
 ### Bird's Eye View (BEV) Visualization
 *Point cloud colored by height (Z), detections in class-specific colors.*
