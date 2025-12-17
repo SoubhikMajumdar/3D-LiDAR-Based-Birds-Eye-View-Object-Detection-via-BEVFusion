@@ -1,29 +1,30 @@
-# BEVFusion: LiDAR-Based 3D Object Detection (Fine-Tuning on nuScenes)
+## Project Overview
 
-This repository contains a **customized and fine-tuned implementation of BEVFusion** for 3D object detection using LiDAR data from the **nuScenes dataset**.
+**BEVMF** (Bird's-Eye View Model Framework) is a comprehensive framework for **BEV-based 3D object detection** models. This project focuses on evaluating and comparing state-of-the-art Bird's-Eye View detection models, including **BEVFusion**, PointPillars, 3DSSD, and CenterPoint.
 
-The project focuses on:
-1.  **Fine-tuning** the model on a partial dataset ("blob01").
-2.  **Customizing** the inference pipeline for demo generation.
-3.  **Visualizing** results with high-quality BEV plots (Z-colored points, class-specific boxes).
+### What is BEV (Bird's-Eye View)?
 
----
+BEV (Bird's-Eye View) is a top-down representation of 3D scenes that projects 3D objects onto a 2D plane, making it easier to understand spatial relationships and object positions. BEV-based models are particularly effective for autonomous driving applications as they provide a unified representation that combines information from multiple sensors (LiDAR, cameras).
 
-#  Results
+### Key Features
 
-### Bird's Eye View (BEV) Visualization
-*Point cloud colored by height (Z), detections in class-specific colors.*
+The framework provides:
+- **BEV visualization** tools for top-down view analysis
+- **Multi-model comparison** across KITTI and nuScenes datasets
+- **Comprehensive evaluation metrics** (mAP, precision, recall, IoU)
+- **Automated artifact export** (point clouds, bounding boxes, predictions, visualizations)
+- **BEVFusion support** with custom CUDA operations compilation
 
-![BEV Visualization](outputs/bevfusion_lidar_fixed/bev_visualization_final.png)
+The core driver is `mmdet3d_inference2.py`, a customized version of OpenMMLab's inference script with enhanced BEV visualization and export utilities. The `scripts/visualize_bev.py` script generates detailed Bird's-Eye View visualizations of detection results.
 
----
+> 📊 **See [REPORT.md](REPORT.md) for comprehensive evaluation results, metrics, and analysis of all models.**
 
-## 🛠️ Setup & Installation
+## Prerequisites
 
-### 1. Environment
-**OS**: Windows (tested) or Linux (WSL2)
-**Python**: 3.8+
-**CUDA**: 11.3+ (Tested with 11.8/12.x on RTX GPU)
+1. **Python 3.10** – installed via Microsoft Store (`winget install Python.Python.3.10`).
+2. **Virtual environment** – created in the repo root: `py -3.10 -m venv .venv`.
+3. **NVIDIA GPU (optional but recommended)** – for CUDA acceleration (GTX 1650 or better recommended).
+4. **CUDA Toolkit 11.3+** – for GPU support (PyTorch will use CUDA 11.8 which is compatible).
 
 ### 2. Install Dependencies
 This project relies on `mmdetection3d` and its ecosystem.
