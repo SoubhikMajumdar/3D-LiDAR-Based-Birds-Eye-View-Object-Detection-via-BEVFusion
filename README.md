@@ -27,6 +27,25 @@ The core driver is `mmdet3d_inference2.py`, a customized version of OpenMMLab's 
 4. **CUDA Toolkit 11.3+** – for GPU support (PyTorch will use CUDA 11.8 which is compatible).
 
 ### 2. Install Dependencies
+#### Option 1: CPU-Only Setup (Limited - PointPillars only)
+```powershell
+python -m pip install -U pip
+pip install -r requirements.txt
+pip install torch==2.1.2+cpu torchvision==0.16.2+cpu torchaudio==2.1.2+cpu \
+    --index-url https://download.pytorch.org/whl/cpu
+```
+
+#### Option 2: CUDA Setup (Recommended for BEV Models)
+```powershell
+python -m pip install -U pip
+pip install -r requirements.txt
+pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 \
+    --index-url https://download.pytorch.org/whl/cu118
+# Install mmcv with CUDA support (required for mmdet3d)
+pip uninstall mmcv -y
+pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu118/torch2.1.0/index.html
+```
+
 This project relies on `mmdetection3d` and its ecosystem.
 
 ```bash
